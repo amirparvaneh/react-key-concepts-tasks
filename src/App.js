@@ -1,24 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from 'react';
+
+import Calculation from './components/Calculation';
+import React from 'react';
+import Result from './components/Result';
+
+
 
 function App() {
+
+  const [enteredNumber, setEnteredNumber] = useState({ first: 0, second: 0 });
+  const [chosenOperation, setChosenOperation] = useState('add');
+
+  function changeFirstNumberHandler(event) {
+    setEnteredNumber((pervNumbers) => ({
+      first: +event.target.value,
+      second: pervNumbers.second,
+    }));
+  }
+
+
+  function changeSeconNumberHandler(event) {
+    setEnteredNumber((pervNumbers) => ({
+      first: pervNumbers.first,
+      second: +event.target.value,
+    }));
+  }
+
+
+  function updateOperationHandler(event) {
+    setChosenOperation(event.target.value);
+  }
+
+
+  let result;
+
+  if (chosenOperation === 'add') {
+    result = enteredNumber.first + enteredNumber.second;
+  } else if (chosenOperation === 'subtract') {
+    result = enteredNumber.first - enteredNumber.second;
+  } else if (chosenOperation === 'multiply') {
+    result = enteredNumber.first * enteredNumber.second;
+  } else {
+    result = enteredNumber.first / enteredNumber.second;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <p>
+      <Calculation
+        onFirstNumberChange={changeFirstNumberHandler}
+        onSecondNumberChange={changeSeconNumberHandler}
+        onOperationChange={updateOperationHandler}
+      />
+      <Result calculationResult={result}/>
+    </p>
   );
 }
 
